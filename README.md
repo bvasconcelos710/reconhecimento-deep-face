@@ -1,0 +1,1 @@
+Projeto de um sistema de reconhecimento facial desenvolvido com Python, Django e a biblioteca Deep-Face.
