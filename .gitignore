@@ -1,0 +1,16 @@
+# Ambiente virtual
+venv/
+__pycache__/
+db.sqlite3
+*.pyc
+
+# Arquivos de log
+*.log
+
+# Configurações do IDE
+.vscode/
+.idea/
+
+# Arquivos do Django
+media/
+staticfiles/

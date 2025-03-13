@@ -1,0 +1,6 @@
+<h2>Enviar Foto para Registro de Presença</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="foto" required>
+    <button type="submit">Validar Presença</button>
+</form>
