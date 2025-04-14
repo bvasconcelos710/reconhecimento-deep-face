@@ -1,26 +1,21 @@
-<h2>Cadastrar Novo Usuário</h2>
+<h2>Verificação de Usuário</h2>
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+<!-- Vídeo da webcam -->
+<video id="video" width="320" height="240" autoplay></video>
+<br>
+<button type="button" onclick="tirarFoto()">Tirar Foto</button>
 
-    <label for="id_nome">Nome:</label>
-    {{ form.nome }}<br><br>
+<!-- Canvas (invisível) e preview da imagem capturada -->
+<canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+<br>
+<img id="foto-preview" src="" alt="Foto capturada" style="display:none; margin-top: 10px; border: 1px solid #ccc;" />
+<br><br>
 
-    <label for="id_cpf">CPF:</label>
-    {{ form.cpf }}<br><br>
-
-    <!-- Campo oculto de imagem -->
-    <input type="file" id="input-foto" name="foto" accept="image/*" style="display: none;" />
-
-    <!-- Webcam e captura -->
-    <label>Capturar Foto:</label><br>
-    <video id="video" width="320" height="240" autoplay></video><br>
-    <button type="button" onclick="tirarFoto()">Tirar Foto</button><br><br>
-
-    <canvas id="canvas" width="320" height="240" style="display: none;"></canvas>
-    <img id="foto-preview" src="" alt="Preview da Foto" style="display: none; border: 1px solid #ccc; margin-top: 10px;" /><br><br>
-
-    <button type="submit">Cadastrar</button>
+<!-- Formulário para envio da imagem -->
+<form id="form-verificacao" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="file" id="input-foto" name="foto" style="display:none;" />
+  <button type="submit">Verificar</button>
 </form>
 
 <script>
@@ -29,7 +24,7 @@
   const inputFoto = document.getElementById('input-foto');
   const imgPreview = document.getElementById('foto-preview');
 
-  // Solicita acesso à webcam
+  // Ativa a webcam
   navigator.mediaDevices.getUserMedia({ video: true })
     .then(stream => {
       video.srcObject = stream;
@@ -43,13 +38,13 @@
     contexto.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     canvas.toBlob(blob => {
+      // Cria o arquivo e insere no input do formulário
       const file = new File([blob], "foto_webcam.jpg", { type: "image/jpeg" });
-
       const dataTransfer = new DataTransfer();
       dataTransfer.items.add(file);
       inputFoto.files = dataTransfer.files;
 
-      // Mostra preview da imagem
+      // Atualiza o preview
       imgPreview.src = URL.createObjectURL(blob);
       imgPreview.style.display = 'block';
     }, 'image/jpeg');

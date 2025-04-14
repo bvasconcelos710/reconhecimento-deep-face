@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuário Reconhecido</title>
+</head>
+<body>
+    <h1>Presença Registrada com Sucesso!</h1>
+
+    <p><strong>Nome:</strong> {{ usuario.nome }}</p>
+    <p><strong>CPF:</strong> {{ usuario.cpf }}</p>
+    <p><strong>Telefone:</strong> {{ usuario.telefone }}</p>
+    <p><strong>E-mail:</strong> {{ usuario.email }}</p>
+
+    {% if usuario.foto %}
+        <p><strong>Foto cadastrada:</strong></p>
+        <img src="{{ usuario.foto.url }}" alt="Foto do usuário" width="200">
+    {% endif %}
+
+    <br><br>
+    <a href="{% url 'validar_presenca' %}">Voltar para verificação</a>
+</body>
+</html>

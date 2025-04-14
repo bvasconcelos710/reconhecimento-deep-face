@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from .models import Usuario, Presenca
 from .reconhecimento import reconhecer_usuario
 from .forms import UsuarioForm
@@ -11,11 +11,11 @@ def validar_presenca(request):
         usuario_encontrado = reconhecer_usuario(imagem, usuarios)
         if usuario_encontrado:
             Presenca.objects.create(usuario=usuario_encontrado)
-            return render(request, 'confirmacao.html', {'usuario': usuario_encontrado})
+            return render(request, 'usuarios/usuario_reconhecido.html', {'usuario': usuario_encontrado})
         
-        return render(request, 'erro.html', {'mensagem': 'Usuário não reconhecido.'})
+        return render(request, 'usuarios/nao_reconhecido.html', {'mensagem': 'Usuário não reconhecido.'})
     
-    return render(request, 'usuarios/upload.html')
+    return render(request, 'usuarios/verificar.html')
 
 
 def cadastrar_usuario(request):
@@ -29,3 +29,6 @@ def cadastrar_usuario(request):
 
     return render(request, 'usuarios/cadastrar_usuario.html', {'form': form})
 
+
+def usuario_cadastrado(request):
+    return render(request, 'usuarios/usuario_cadastrado.html')
