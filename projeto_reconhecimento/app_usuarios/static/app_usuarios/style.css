@@ -1,0 +1,88 @@
+body {
+    background-color: #f3f4f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #333333;
+  }
+
+  .container form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #333;
+  }
+  
+  button {
+    width: 60%;
+    padding: 0.50rem;
+    background-color: #2074ced2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #1a3b8a;
+  }
+
+/* tela de usuário verificado  */
+
+  #foto-preview {
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1 {
+    color: #2074ced2;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+img {
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.botao {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #2074ced2;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.botao:hover {
+    background-color: #1a3b8a;
+}
+
+  

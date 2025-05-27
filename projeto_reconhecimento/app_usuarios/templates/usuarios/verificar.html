@@ -1,52 +1,63 @@
-<h2>Verificação de Usuário</h2>
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Verificação de Usuário</title>
+    <link rel="stylesheet" href="{% static 'app_usuarios/style.css' %}">
+</head>
+<body>
+  <div class="container">
+    <h2>Verificação de Usuário</h2>
 
-<!-- Vídeo da webcam -->
-<video id="video" width="320" height="240" autoplay></video>
-<br>
-<button type="button" onclick="tirarFoto()">Tirar Foto</button>
+    <!-- Vídeo da webcam -->
+     <div>
+    <video id="video" width="320" height="240" autoplay></video>
+    <br>
+    <button type="button" onclick="tirarFoto()">Tirar Foto</button>
+    </div>
+    <!-- Canvas invisível e preview -->
+    <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+    <br>
+    <img id="foto-preview" src="" alt="Foto capturada" style="display:none;" />
+    <br><br>
 
-<!-- Canvas (invisível) e preview da imagem capturada -->
-<canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
-<br>
-<img id="foto-preview" src="" alt="Foto capturada" style="display:none; margin-top: 10px; border: 1px solid #ccc;" />
-<br><br>
+    <!-- Formulário -->
+    <form id="form-verificacao" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" id="input-foto" name="foto" style="display:none;" />
+      <button type="submit">Verificar</button>
+    </form>
+  </div>
 
-<!-- Formulário para envio da imagem -->
-<form id="form-verificacao" method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  <input type="file" id="input-foto" name="foto" style="display:none;" />
-  <button type="submit">Verificar</button>
-</form>
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const inputFoto = document.getElementById('input-foto');
+    const imgPreview = document.getElementById('foto-preview');
 
-<script>
-  const video = document.getElementById('video');
-  const canvas = document.getElementById('canvas');
-  const inputFoto = document.getElementById('input-foto');
-  const imgPreview = document.getElementById('foto-preview');
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        console.error("Erro ao acessar a câmera: ", err);
+      });
 
-  // Ativa a webcam
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-      video.srcObject = stream;
-    })
-    .catch(err => {
-      console.error("Erro ao acessar a câmera: ", err);
-    });
+    function tirarFoto() {
+      const contexto = canvas.getContext('2d');
+      contexto.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  function tirarFoto() {
-    const contexto = canvas.getContext('2d');
-    contexto.drawImage(video, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob(blob => {
+        const file = new File([blob], "foto_webcam.jpg", { type: "image/jpeg" });
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        inputFoto.files = dataTransfer.files;
 
-    canvas.toBlob(blob => {
-      // Cria o arquivo e insere no input do formulário
-      const file = new File([blob], "foto_webcam.jpg", { type: "image/jpeg" });
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(file);
-      inputFoto.files = dataTransfer.files;
-
-      // Atualiza o preview
-      imgPreview.src = URL.createObjectURL(blob);
-      imgPreview.style.display = 'block';
-    }, 'image/jpeg');
-  }
-</script>
+        imgPreview.src = URL.createObjectURL(blob);
+        imgPreview.style.display = 'block';
+      }, 'image/jpeg');
+    }
+  </script>
+</body>
+</html>
