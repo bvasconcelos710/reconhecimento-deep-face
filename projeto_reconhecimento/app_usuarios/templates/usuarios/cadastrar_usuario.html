@@ -1,68 +1,69 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Cadastrar Novo Usuário</title>
-    <link rel="stylesheet" href="{% static 'app_usuarios/style.css' %}">
-</head>
-<body>
-    <div class="container">
-        <h2>Cadastrar Novo Usuário</h2>
+{% extends 'base.html' %}
+{% block title %}Cadastro de Usuário{% endblock %}
 
-        <form class="form" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-          
-            <label for="id_nome">Nome:</label>
-            {{ form.nome }}<br><br>
+{% block content %}
+<div class="container">
+  <h2>Cadastrar Novo Usuário</h2>
 
-            <label for="id_cpf">CPF:</label>
-            {{ form.cpf }}<br><br>
+  <form class="form" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
 
-            <!-- Campo oculto de imagem -->
-            <input type="file" id="input-foto" name="foto" accept="image/*" style="display: none;" />
+    <label for="id_nome">Nome:</label>
+    {{ form.nome }}<br><br>
 
-            <!-- Webcam e captura -->
-            <label>Capturar Foto:</label><br>
-            <video id="video" width="320" height="240" autoplay></video><br>
-            <button type="button" onclick="tirarFoto()">Tirar Foto</button><br><br>
+    <label for="id_cpf">CPF:</label>
+    {{ form.cpf }}<br><br>
 
-            <canvas id="canvas" width="320" height="240" style="display: none;"></canvas>
-            <img id="foto-preview" src="" alt="Preview da Foto" style="display: none; border: 1px solid #ccc; margin-top: 10px;" /><br><br>
+    <label for="id_telefone">Telefone:</label>
+    {{ form.telefone }}<br><br>
 
-            <button type="submit">Cadastrar</button>
-        </form>
-    </div>
+    <label for="id_num_processo">Número do Processo:</label>
+    {{ form.num_processo }}<br><br>
 
-    <script>
-      const video = document.getElementById('video');
-      const canvas = document.getElementById('canvas');
-      const inputFoto = document.getElementById('input-foto');
-      const imgPreview = document.getElementById('foto-preview');
+    <!-- Campo oculto de imagem -->
+    <input type="file" id="input-foto" name="foto" accept="image/*" style="display: none;" />
 
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-          video.srcObject = stream;
-        })
-        .catch(err => {
-          console.error("Erro ao acessar a câmera: ", err);
-        });
+    <!-- Webcam e captura -->
+    <label>Capturar Foto:</label><br>
+    <video id="video" width="320" height="240" autoplay></video><br>
+    <button type="button" onclick="tirarFoto()">Tirar Foto</button><br><br>
 
-      function tirarFoto() {
-        const contexto = canvas.getContext('2d');
-        contexto.drawImage(video, 0, 0, canvas.width, canvas.height);
+    <canvas id="canvas" width="320" height="240" style="display: none;"></canvas>
+    <img id="foto-preview" src="" alt="Preview da Foto"
+      style="display: none; border: 1px solid #ccc; margin-top: 10px;" /><br><br>
 
-        canvas.toBlob(blob => {
-          const file = new File([blob], "foto_webcam.jpg", { type: "image/jpeg" });
+    <button type="submit">Cadastrar</button>
+  </form>
+</div>
+</div>
+<script>
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const inputFoto = document.getElementById('input-foto');
+  const imgPreview = document.getElementById('foto-preview');
 
-          const dataTransfer = new DataTransfer();
-          dataTransfer.items.add(file);
-          inputFoto.files = dataTransfer.files;
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      video.srcObject = stream;
+    })
+    .catch(err => {
+      console.error("Erro ao acessar a câmera: ", err);
+    });
 
-          imgPreview.src = URL.createObjectURL(blob);
-          imgPreview.style.display = 'block';
-        }, 'image/jpeg');
-      }
-    </script>
-</body>
-</html>
+  function tirarFoto() {
+    const contexto = canvas.getContext('2d');
+    contexto.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    canvas.toBlob(blob => {
+      const file = new File([blob], "foto_webcam.jpg", { type: "image/jpeg" });
+
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      inputFoto.files = dataTransfer.files;
+
+      imgPreview.src = URL.createObjectURL(blob);
+      imgPreview.style.display = 'block';
+    }, 'image/jpeg');
+  }
+</script>
+{% endblock %}

@@ -1,14 +1,9 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Usuário Não Reconhecido</title>
-    <link rel="stylesheet" href="{% static 'app_usuarios/style.css' %}">
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Verificação de Usuário{% endblock %}
+
+{% block content %}
 <div class="container">
-<h1>Usuário cadastrado com sucesso!</h2>
-<a class="botao" href="/">Voltar</a>
+    <h1>Usuário cadastrado com sucesso!</h2>
+        <a class="botao" href="/">Voltar</a>
 </div>
-</body>
+{% endblock %}

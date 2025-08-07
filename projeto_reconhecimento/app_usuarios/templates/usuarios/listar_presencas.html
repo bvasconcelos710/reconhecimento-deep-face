@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Registros de Presença{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Registros de Presença</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Data/Hora</th>
+                <th>Número do Processo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for presenca in presencas %}
+            <tr>
+                <td>{{ presenca.usuario.nome }}</td>
+                <td>{{ presenca.usuario.cpf }}</td>
+                <td>{{ presenca.data_presenca|date:"d/m/Y H:i" }}</td>
+                <td>{{ presenca.usuario.num_processo }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

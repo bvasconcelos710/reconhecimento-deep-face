@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from .models import Usuario, Presenca
 from .reconhecimento import reconhecer_usuario
 from .forms import UsuarioForm
+from django.core.paginator import Paginator
+
+def inicio(request):
+    return render(request, 'inicio.html')
 
 def validar_presenca(request):
     if request.method == 'POST' and request.FILES['foto']:
@@ -32,3 +36,16 @@ def cadastrar_usuario(request):
 
 def usuario_cadastrado(request):
     return render(request, 'usuarios/usuario_cadastrado.html')
+
+def listar_usuarios(request):
+    usuarios = Usuario.objects.all()
+    return render(request, 'usuarios/listar_usuarios.html', {'usuarios': usuarios})
+
+def listar_presencas(request):
+    presencas_list = Presenca.objects.select_related('usuario').order_by('-data_presenca')
+    paginator = Paginator(presencas_list, 10)  # 10 por página
+
+    page_number = request.GET.get('page')
+    presencas = paginator.get_page(page_number)
+
+    return render(request, 'usuarios/listar_presencas.html', {'presencas': presencas})

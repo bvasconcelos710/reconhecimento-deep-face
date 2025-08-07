@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Usuários Cadastrados{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Usuários Cadastrados</h2>
+
+    <div class="lista-usuarios">
+        {% for usuario in usuarios %}
+        <div class="card-usuario">
+            {% if usuario.foto %}
+            <img class="foto-usuario" src="{{ usuario.foto.url }}" alt="Foto de {{ usuario.nome }}">
+            {% endif %}
+            <div class="info-usuario">
+                <p><strong>Nome:</strong> {{ usuario.nome }}</p>
+                <p><strong>CPF:</strong> {{ usuario.cpf }}</p>
+                <p><strong>Telefone:</strong> {{ usuario.telefone }}</p>
+                <p><strong>Processo:</strong> {{ usuario.num_processo }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

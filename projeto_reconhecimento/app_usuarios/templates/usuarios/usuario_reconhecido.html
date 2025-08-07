@@ -1,27 +1,21 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Usuário Reconhecido</title>
-    <link rel="stylesheet" href="{% static 'app_usuarios/style.css' %}">
-</head>
-<body>
-    <div class="container">
+{% extends 'base.html' %}
+{% block title %}Verificação de Usuário{% endblock %}
+
+{% block content %}
+<div class="container">
     <h1>Presença Registrada com Sucesso!</h1>
 
     <p><strong>Nome:</strong> {{ usuario.nome }}</p>
     <p><strong>CPF:</strong> {{ usuario.cpf }}</p>
     <p><strong>Telefone:</strong> {{ usuario.telefone }}</p>
-    <p><strong>E-mail:</strong> {{ usuario.email }}</p>
+    <p><strong>Número do Processo:</strong> {{ usuario.num_processo }}</p>
 
     {% if usuario.foto %}
-        <p><strong>Foto cadastrada:</strong></p>
-        <img src="{{ usuario.foto.url }}" alt="Foto do usuário" width="200">
+    <p><strong>Foto cadastrada:</strong></p>
+    <img src="{{ usuario.foto.url }}" alt="Foto do usuário" width="200">
     {% endif %}
 
     <br><br>
     <a class="botao" href="{% url 'validar_presenca' %}">Voltar para verificação</a>
-    </div>
-</body>
-</html>
+</div>
+{% endblock %}

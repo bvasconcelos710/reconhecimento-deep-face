@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Sistema Reconhecimento Facial{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'app_usuarios/style.css' %}">
+</head>
+
+<body>
+    <div class="wrapper">
+
+        <!-- Header -->
+        <header class="header">
+            <h1> JusFacial</h1>
+            <nav>
+                <a href="{% url 'inicio' %}">Início</a>
+                <a href="{% url 'validar_presenca' %}">Verificar</a>
+                <a href="{% url 'cadastrar_usuario' %}">Cadastrar</a>
+                <a href="{% url 'listar_usuarios' %}">Usuários</a>
+                <a href="{% url 'listar_presencas' %}">Registros</a>
+            </nav>
+        </header>
+
+        <!-- Conteúdo da página -->
+        <main class="main-content">
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 - JusFacial</p>
+        </footer>
+
+    </div>
+</body>
+
+</html>
