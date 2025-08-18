@@ -1,7 +1,10 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
+    
+    path('registrar/', views.registrar_usuario, name='registrar'),
     path('', views.inicio, name='inicio'), 
     path('validar-presenca/', views.validar_presenca, name='validar_presenca'),
     path('cadastrar_usuario/', views.cadastrar_usuario, name='cadastrar_usuario'),

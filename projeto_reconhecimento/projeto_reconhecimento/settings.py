@@ -33,13 +33,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'app_usuarios',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app_usuarios',
+    
 ]
 
 MIDDLEWARE = [
@@ -106,13 +107,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 
 USE_TZ = True
+
+USE_L10N = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -126,5 +129,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'  # para onde vai após login
+LOGOUT_REDIRECT_URL = '/'  # após logout
