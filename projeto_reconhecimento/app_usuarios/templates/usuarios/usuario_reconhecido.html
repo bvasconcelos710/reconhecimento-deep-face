@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container">
-    <h1>Presença Registrada com Sucesso!</h1>
+    <h2>Presença Registrada com Sucesso!</h2>
 
     <p><strong>Nome:</strong> {{ usuario.nome }}</p>
     <p><strong>CPF:</strong> {{ usuario.cpf }}</p>
@@ -16,6 +16,6 @@
     {% endif %}
 
     <br><br>
-    <a class="botao" href="{% url 'validar_presenca' %}">Voltar para verificação</a>
+    <a class="btn btn-custom" href="/">Voltar</a>
 </div>
 {% endblock %}

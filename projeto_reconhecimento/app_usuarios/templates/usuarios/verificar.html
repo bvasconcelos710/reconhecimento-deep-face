@@ -2,44 +2,55 @@
 {% block title %}Verificação de Usuário{% endblock %}
 
 {% block content %}
-<div class="container">
-  <h2>Verificação de Usuário</h2>
+<div class="container text-center mt-4">
+  <h2 class="mb-4">
+    <i class="bi bi-check2-square"></i>
+    Verificação de Apenado
+  </h2>
 
-  <!-- Vídeo da webcam -->
-  <div>
-    <video id="video" width="320" height="240" autoplay></video>
-    <br>
-    <button type="button" onclick="tirarFoto()">Tirar Foto</button>
+  <div class="row justify-content-center align-items-center">
+    <!-- Vídeo da webcam -->
+    <div class="col-md-6 mb-3 d-flex justify-content-center">
+      <div class="card shadow-sm p-3">
+        <video id="video" class="w-100 rounded" autoplay></video>
+        <button type="button" class="btn btn-custom mt-3 w-100" onclick="tirarFoto()">Tirar Foto</button>
+      </div>
+    </div>
+
+    <!-- Pré-visualização da foto -->
+    <div class="col-md-6 mb-3 d-none" id="preview-card">
+      <div class="card shadow-sm p-3 text-center">
+        <img id="foto-preview" src="" alt="Foto capturada" class="img-fluid rounded mb-2" />
+        <button type="button" class="btn btn-custom w-100" onclick="refazerFoto()">Refazer Foto</button>
+      </div>
+    </div>
   </div>
-  <!-- Canvas invisível e preview -->
-  <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
-  <br>
-  <img id="foto-preview" src="" alt="Foto capturada" style="display:none;" />
-  <br><br>
 
   <!-- Formulário -->
-  <form id="form-verificacao" method="POST" enctype="multipart/form-data">
+  <form id="form-verificacao" method="POST" enctype="multipart/form-data" class="mt-4">
     {% csrf_token %}
     <input type="file" id="input-foto" name="foto" style="display:none;" />
-    <button type="submit">Verificar</button>
+    <button type="submit" class="btn btn-secondary">Verificar</button>
   </form>
 </div>
 
+<!-- Script -->
 <script>
   const video = document.getElementById('video');
-  const canvas = document.getElementById('canvas');
+  const canvas = document.createElement('canvas');
   const inputFoto = document.getElementById('input-foto');
   const imgPreview = document.getElementById('foto-preview');
+  const previewCard = document.getElementById('preview-card');
 
+  // Inicializa câmera
   navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-      video.srcObject = stream;
-    })
-    .catch(err => {
-      console.error("Erro ao acessar a câmera: ", err);
-    });
+    .then(stream => { video.srcObject = stream; })
+    .catch(err => { console.error("Erro ao acessar a câmera: ", err); });
 
+  // Tirar foto
   function tirarFoto() {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
     const contexto = canvas.getContext('2d');
     contexto.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -50,16 +61,23 @@
       inputFoto.files = dataTransfer.files;
 
       imgPreview.src = URL.createObjectURL(blob);
-      imgPreview.style.display = 'block';
+      previewCard.classList.remove("d-none");
     }, 'image/jpeg');
   }
 
+  // Refazer foto
+  function refazerFoto() {
+    imgPreview.src = "";
+    inputFoto.value = "";
+    previewCard.classList.add("d-none");
+  }
+
+  // Verificação do formulário
   document.getElementById('form-verificacao').addEventListener('submit', function (event) {
     if (inputFoto.files.length === 0) {
       alert("Por favor, tire uma foto antes de verificar.");
-      event.preventDefault(); // Impede o envio do formulário
+      event.preventDefault();
     }
   });
-
 </script>
 {% endblock %}

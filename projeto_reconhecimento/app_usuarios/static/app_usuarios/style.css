@@ -31,6 +31,17 @@ html {
   background-color: #165fadd2 !important;
 }
 
+.nav-brand {
+  font-weight: bold;
+  font-size: 26px;
+  color: rgb(255, 255, 255) !important;
+}
+
+.nav-brand:hover {
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+
 .navbar a {
   color: white;
   margin: 0 15px;
@@ -53,6 +64,21 @@ html {
   padding: 40px 20px;
 }
 
+.btn-custom {
+  background-color: #165fadd2;
+  border-color: #165fadd2;
+  color: white;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-custom:hover {
+  background-color: #0f4c8a;
+  /* um tom mais escuro para hover */
+  border-color: #0f4c8a;
+  transform: translateY(-2px);
+}
+
+
 .footer {
   background-color: #eee;
   text-align: center;
@@ -64,7 +90,7 @@ html {
 
 .container {
   width: 100%;
-  max-width: 700px;
+  max-width: 800px;
   background-color: eee;
   margin: 40px auto;
   padding: 30px;
@@ -79,12 +105,7 @@ h2 {
   color: #333333;
 }
 
-.container form label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 6px;
-  color: #333;
-}
+
 
 button {
   width: 30%;
@@ -98,17 +119,6 @@ button {
 
 button:hover {
   background-color: #1a3b8a;
-}
-
-.menu-inicial {
-  list-style: none;
-  padding: 0;
-  margin-top: 30px;
-}
-
-.menu-inicial li {
-  margin-bottom: 15px;
-  /* espaçamento entre os botões */
 }
 
 /* tela de usuário verificado  */
@@ -137,60 +147,9 @@ img {
   border-radius: 4px;
 }
 
-.botao {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #2074ced2;
+
+
+.custom-thead {
+  background-color: #165fadd2 !important;
   color: white;
-  text-decoration: none;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
-
-.botao:hover {
-  background-color: #1a3b8a;
-}
-
-/* tela de registros  de presença  */
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-table th,
-table td {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: left;
-}
-
-table th {
-  background-color: #165fadd2;
-  color: white;
-}
-
-.paginacao {
-  text-align: center;
-  margin-top: 30px;
-}
-
-.paginacao a {
-  display: inline-block;
-  margin: 0 8px;
-  padding: 6px 12px;
-  background-color: #2074ced2;
-  color: white;
-  border-radius: 4px;
-  text-decoration: none;
-}
-
-.paginacao a:hover {
-  background-color: #1a3b8a;
-}
-
-.paginacao span {
-  margin: 0 12px;
-  font-weight: bold;
 }

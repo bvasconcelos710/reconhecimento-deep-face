@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Apagar Usuário{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Apagar Usuário</h2>
+    <p>Tem certeza que deseja apagar o usuário <strong>{{ usuario.nome }}</strong>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Sim</button>
+        <button href="{% url 'listar_usuarios' %}" class="btn btn-secondary">Cancelar</button>
+    </form>
+</div>
+{% endblock %}

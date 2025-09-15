@@ -2,23 +2,77 @@
 {% block title %}Usuários Cadastrados{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Usuários Cadastrados</h2>
+<div class="my-5">
+    <h2 class="mb-4 text-center">
+        <i class="bi bi-person"></i>
+        Apenados Cadastrados
+    </h2>
 
-    <div class="lista-usuarios">
+    <div class="row">
         {% for usuario in usuarios %}
-        <div class="card-usuario">
-            {% if usuario.foto %}
-            <img class="foto-usuario" src="{{ usuario.foto.url }}" alt="Foto de {{ usuario.nome }}">
-            {% endif %}
-            <div class="info-usuario">
-                <p><strong>Nome:</strong> {{ usuario.nome }}</p>
-                <p><strong>CPF:</strong> {{ usuario.cpf }}</p>
-                <p><strong>Telefone:</strong> {{ usuario.telefone }}</p>
-                <p><strong>Processo:</strong> {{ usuario.num_processo }}</p>
+        <div class="col-8 mb-3 text-center justify-content-center mx-auto">
+            <div class="row g-0 align-items-center shadow rounded">
+                <div class="col-md-4 text-center">
+                    {% if usuario.foto %}
+                    <img src="{{ usuario.foto.url }}" alt="Foto de {{ usuario.nome }}"
+                        class="img-fluid rounded-start mb-2" style="max-height: 150px; object-fit: cover;">
+                    {% else %}
+                    <img src="https://via.placeholder.com/150" alt="Sem foto" class="img-fluid rounded-start"
+                        style="max-height: 150px; object-fit: cover;">
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ usuario.nome }}</h5>
+                        <p class="card-text mb-1"><strong>CPF:</strong> {{ usuario.cpf }}</p>
+                        <p class="card-text mb-1"><strong>Telefone:</strong> {{ usuario.telefone }}</p>
+                        <p class="card-text mb-0"><strong>Processo:</strong> {{ usuario.num_processo }}</p>
+                    </div>
+                    <a href="{% url 'detalhes_usuario' usuario.id %}" class="btn btn-sm btn-custom mt-1">Detalhes</a>
+                </div>
+                <div class="col-md-2 mt-2">
+                    <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-sm btn-secondary">Editar</a>
+                    <a href="{% url 'deletar_usuario' usuario.id %}" class="btn btn-sm btn-danger">Apagar</a>
+                </div>
             </div>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
+</div>
+
+<!-- Paginação -->
+<div class="d-flex justify-content-center mt-4">
+    <nav>
+        <ul class="pagination">
+            {% if usuarios.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ usuarios.previous_page_number }}">Anterior</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Anterior</span>
+            </li>
+            {% endif %}
+
+            {% for num in usuarios.paginator.page_range %}
+            {% if usuarios.number == num %}
+            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+            {% endfor %}
+
+            {% if usuarios.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ usuarios.next_page_number }}">Próximo</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Próximo</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
 </div>
 {% endblock %}

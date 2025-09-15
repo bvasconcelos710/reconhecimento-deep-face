@@ -2,68 +2,165 @@
 {% block title %}Cadastro de Usuário{% endblock %}
 
 {% block content %}
-<div class="container">
-  <h2>Cadastrar Novo Usuário</h2>
+<div class="mt-5">
+  <div class="row justify-content-center">
+    <!-- Coluna com o formulário -->
+    <div class="col-md-8">
+      <div class="card shadow p-4">
+        <h2 class="text-center mb-4">
+          <i class="bi bi-person-add"></i>
+          Cadastrar Apenado
+        </h2>
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
 
-  <form class="form" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+          <div class="d-flex gap-3">
+            <div>
 
-    <label for="id_nome">Nome:</label>
-    {{ form.nome }}<br><br>
+              <!-- Coluna direita - Câmera -->
+              <div class="items-center">
+                <div class="text-center">
+                  <div class="d-flex flex-column align-items-center">
+                    <video id="video" class="border rounded mb-3" width="320" height="240" autoplay playsinline></video>
 
-    <label for="id_cpf">CPF:</label>
-    {{ form.cpf }}<br><br>
+                    <canvas id="canvas" width="320" height="240" class="d-none"></canvas>
 
-    <label for="id_telefone">Telefone:</label>
-    {{ form.telefone }}<br><br>
+                    <img id="foto-preview" src="" alt="Preview da Foto" width="320" height="240"
+                      class="img-fluid rounded shadow d-none mb-3" />
+                    <button type="button" class="btn btn-custom mb-2" id="btn-tirar-foto" onclick="tirarFoto()">
+                      Tirar Foto
+                    </button>
+                    <button type="button" class="btn btn-secondary d-none" id="btn-refazer">
+                      Refazer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex-grow-1">
+              <!-- Nome -->
+              <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" required>
+              </div>
 
-    <label for="id_num_processo">Número do Processo:</label>
-    {{ form.num_processo }}<br><br>
+              <!-- CPF -->
+              <div class="mb-3">
+                <label for="cpf" class="form-label">CPF</label>
+                <input type="text" class="form-control" id="cpf" name="cpf" required>
+              </div>
 
-    <!-- Campo oculto de imagem -->
-    <input type="file" id="input-foto" name="foto" accept="image/*" style="display: none;" />
+              <!-- Telefone -->
+              <div class="mb-3">
+                <label for="telefone" class="form-label">Telefone</label>
+                <input type="tel" class="form-control" id="telefone" name="telefone">
+              </div>
 
-    <!-- Webcam e captura -->
-    <label>Capturar Foto:</label><br>
-    <video id="video" width="320" height="240" autoplay></video><br>
-    <button type="button" onclick="tirarFoto()">Tirar Foto</button><br><br>
+              <!-- Número do Processo -->
+              <div class="mb-3">
+                <label for="num_processo" class="form-label">Número do processo</label>
+                <input type="text" class="form-control" id="num_processo" name="num_processo" required>
+              </div>
+            </div>
 
-    <canvas id="canvas" width="320" height="240" style="display: none;"></canvas>
-    <img id="foto-preview" src="" alt="Preview da Foto"
-      style="display: none; border: 1px solid #ccc; margin-top: 10px;" /><br><br>
+          </div>
 
-    <button type="submit">Cadastrar</button>
-  </form>
-</div>
-</div>
-<script>
-  const video = document.getElementById('video');
-  const canvas = document.getElementById('canvas');
-  const inputFoto = document.getElementById('input-foto');
-  const imgPreview = document.getElementById('foto-preview');
+          <!-- Campo oculto que vai com a foto para o backend -->
+          <input type="file" id="input-foto" name="foto" accept="image/*" class="d-none" />
 
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-      video.srcObject = stream;
-    })
-    .catch(err => {
-      console.error("Erro ao acessar a câmera: ", err);
+          <!-- Botão -->
+          <div>
+            <button type="submit" class="btn btn-custom">Cadastrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+
+
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const video = document.getElementById('video');
+      const canvas = document.getElementById('canvas');
+      const inputFoto = document.getElementById('input-foto');
+      const imgPreview = document.getElementById('foto-preview');
+      const btnRefazer = document.getElementById('btn-refazer');
+      const form = document.querySelector('form');
+
+      // Ativar webcam
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(stream => {
+            video.srcObject = stream;
+          })
+          .catch(err => {
+            console.error("Erro ao acessar a câmera:", err);
+            alert("Não foi possível acessar a câmera. Verifique permissões/HTTPS.");
+          });
+      } else {
+        alert("getUserMedia não é suportado neste navegador.");
+      }
+
+      // Ajusta o canvas quando os metadados do vídeo carregarem
+      video.addEventListener('loadedmetadata', () => {
+        // Usa a resolução nativa quando disponível
+        canvas.width = video.videoWidth || 320;
+        canvas.height = video.videoHeight || 240;
+      });
+
+      // Exponha a função no escopo global (porque está usando onclick no HTML)
+      window.tirarFoto = function () {
+        const ctx = canvas.getContext('2d');
+
+        // Garante que o canvas tenha tamanho válido
+        if (!canvas.width || !canvas.height) {
+          canvas.width = video.videoWidth || 320;
+          canvas.height = video.videoHeight || 240;
+        }
+
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        canvas.toBlob(blob => {
+          if (!blob) {
+            alert("Falha ao capturar a imagem. Tente novamente.");
+            return;
+          }
+
+          // Cria arquivo e injeta no input file oculto
+          const file = new File([blob], "foto_webcam.jpg", { type: "image/jpeg" });
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(file);
+          inputFoto.files = dataTransfer.files;
+
+          // Preview
+          imgPreview.src = URL.createObjectURL(blob);
+          imgPreview.classList.remove('d-none');
+
+          // Mostra botão Refazer
+          btnRefazer.classList.remove('d-none');
+        }, 'image/jpeg', 0.92);
+      };
+
+      // Refazer foto
+      btnRefazer?.addEventListener('click', () => {
+        inputFoto.value = ""; // limpa arquivo
+        imgPreview.src = "";
+        imgPreview.classList.add('d-none');
+        btnRefazer.classList.add('d-none');
+      });
+
+      // Impede submit sem foto
+      form.addEventListener('submit', (e) => {
+        if (!inputFoto.files || inputFoto.files.length === 0) {
+          e.preventDefault();
+          alert('Tire a foto antes de cadastrar.');
+        }
+      });
     });
-
-  function tirarFoto() {
-    const contexto = canvas.getContext('2d');
-    contexto.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    canvas.toBlob(blob => {
-      const file = new File([blob], "foto_webcam.jpg", { type: "image/jpeg" });
-
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(file);
-      inputFoto.files = dataTransfer.files;
-
-      imgPreview.src = URL.createObjectURL(blob);
-      imgPreview.style.display = 'block';
-    }, 'image/jpeg');
-  }
-</script>
-{% endblock %}
+  </script>
+  {% endblock %}

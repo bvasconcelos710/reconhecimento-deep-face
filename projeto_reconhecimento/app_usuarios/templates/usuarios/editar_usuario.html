@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}Editar Usuário{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Editar Apenado</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" id="nome" name="nome" class="form-control" value="{{ usuario.nome }}" required>
+            </div>
+            <div class="col-md-6">
+                <label for="cpf" class="form-label">CPF</label>
+                <input type="text" id="cpf" name="cpf" class="form-control" value="{{ usuario.cpf }}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="telefone" class="form-label">Telefone</label>
+                <input type="text" id="telefone" name="telefone" class="form-control" value="{{ usuario.telefone }}">
+            </div>
+            <div class="col-md-6">
+                <label for="num_processo" class="form-label">Número do Processo</label>
+                <input type="text" id="num_processo" name="num_processo" class="form-control"
+                    value="{{ usuario.num_processo }}">
+            </div>
+        </div>
+
+        <!-- Foto atual -->
+        <div class="mt-4">
+            <label class="form-label">Foto Atual</label>
+            <div class="align-items-center gap-3">
+                {% if usuario.foto %}
+                <img src="{{ usuario.foto.url }}" alt="Foto atual" class="img-thumbnail" width="150"
+                    id="fotoPreviewAtual">
+                {% else %}
+                <p>Sem foto cadastrada</p>
+                {% endif %}
+                <a type="button" class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#fotoModal">
+                    Tirar Nova Foto
+                </a>
+            </div>
+        </div>
+
+        <!-- Pré-visualização da nova foto -->
+        <div class="mt-3 d-none" id="novaFotoContainer">
+            <label class="form-label">Nova Foto Selecionada</label><br>
+            <img id="novaFotoPreview" class="img-thumbnail" width="150">
+            <input type="hidden" name="nova_foto" id="novaFotoInput">
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-success">Salvar Alterações</button>
+            <button href="{% url 'listar_usuarios' %}" class="btn btn-secondary">Cancelar</button>
+        </div>
+    </form>
+</div>
+
+<!-- Modal para tirar nova foto -->
+<div class="modal fade" id="fotoModal" tabindex="-1" aria-labelledby="fotoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Capturar Nova Foto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body text-center">
+                <video id="camera" autoplay class="border rounded w-100" style="max-height: 400px;"></video>
+                <canvas id="canvas" class="d-none"></canvas>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="tirarFotoBtn">Tirar Foto</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const video = document.getElementById('camera');
+    const canvas = document.getElementById('canvas');
+    const tirarFotoBtn = document.getElementById('tirarFotoBtn');
+    const novaFotoPreview = document.getElementById('novaFotoPreview');
+    const novaFotoContainer = document.getElementById('novaFotoContainer');
+    const novaFotoInput = document.getElementById('novaFotoInput');
+
+    // Ativar câmera ao abrir modal
+    document.getElementById('fotoModal').addEventListener('shown.bs.modal', async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+        } catch (err) {
+            alert("Erro ao acessar a câmera: " + err);
+        }
+    });
+
+    // Tirar foto
+    tirarFotoBtn.addEventListener('click', () => {
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const imageData = canvas.toDataURL('image/png');
+        novaFotoPreview.src = imageData;
+        novaFotoInput.value = imageData;
+        novaFotoContainer.classList.remove('d-none');
+
+        // Fecha modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('fotoModal'));
+        modal.hide();
+    });
+</script>
+{% endblock %}
