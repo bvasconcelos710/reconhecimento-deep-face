@@ -2,7 +2,7 @@ from django.db import models
 
 class Usuario(models.Model):
     nome = models.CharField(max_length=100)
-    cpf = models.CharField(max_length=14, unique=True)  # Formato: 000.000.000-00
+    cpf = models.CharField(max_length=14, unique=True)
     foto = models.ImageField(upload_to='fotos_usuarios/')
     data_cadastro = models.DateTimeField(auto_now_add=True)
     telefone = models.CharField(max_length=12, null=True)

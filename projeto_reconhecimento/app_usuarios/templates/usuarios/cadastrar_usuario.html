@@ -3,13 +3,13 @@
 
 {% block content %}
 <div class="mt-5">
-  <div class="row justify-content-center">
+  <div class="cadastrar row justify-content-center">
     <!-- Coluna com o formulário -->
     <div class="col-md-8">
       <div class="card shadow p-4">
         <h2 class="text-center mb-4">
           <i class="bi bi-person-add"></i>
-          Cadastrar Apenado
+          Cadastrar Réu
         </h2>
         <form method="POST" enctype="multipart/form-data">
           {% csrf_token %}
@@ -41,25 +41,38 @@
               <!-- Nome -->
               <div class="mb-3">
                 <label for="nome" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="nome" name="nome" required>
+                <input type="text" class="form-control" id="nome" name="nome" placeholder="nome completo" required>
+                {% for e in form.nome.errors %}
+                <div class="invalid-feedback d-block">{{ e }}</div>
+                {% endfor %}
               </div>
 
               <!-- CPF -->
               <div class="mb-3">
                 <label for="cpf" class="form-label">CPF</label>
-                <input type="text" class="form-control" id="cpf" name="cpf" required>
+                <input type="text" class="form-control" id="cpf" name="cpf" placeholder="000.000.000-00 " required>
+                {% for e in form.cpf.errors %}
+                <div class="invalid-feedback d-block">{{ e }}</div>
+                {% endfor %}
               </div>
 
               <!-- Telefone -->
               <div class="mb-3">
                 <label for="telefone" class="form-label">Telefone</label>
-                <input type="tel" class="form-control" id="telefone" name="telefone">
+                <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="(99) 99999-9999">
+                {% for e in form.telefone.errors %}
+                <div class="invalid-feedback d-block">{{ e }}</div>
+                {% endfor %}
               </div>
 
               <!-- Número do Processo -->
               <div class="mb-3">
                 <label for="num_processo" class="form-label">Número do processo</label>
-                <input type="text" class="form-control" id="num_processo" name="num_processo" required>
+                <input type="text" class="form-control" id="num_processo" name="num_processo"
+                  placeholder="0000000-00.0000.0.00.0000" required>
+                {% for e in form.num_processo.errors %}
+                <div class="invalid-feedback d-block">{{ e }}</div>
+                {% endfor %}
               </div>
             </div>
 

@@ -9,6 +9,12 @@ class UsuarioForm(forms.ModelForm):
         model = Usuario
         fields = ['nome', 'cpf', 'telefone', 'num_processo', 'foto']  # Campos que o formulário vai incluir
         
+    def clean_cpf(self):
+        cpf = self.cleaned_data.get('cpf')
+        if Usuario.objects.filter(cpf=cpf).exists():
+            raise forms.ValidationError("Este CPF já está cadastrado.")
+        return cpf
+        
         
 
 class UsuarioRegistroForm(UserCreationForm):

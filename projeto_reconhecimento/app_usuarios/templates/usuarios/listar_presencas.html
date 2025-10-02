@@ -16,6 +16,7 @@
                     <th>CPF</th>
                     <th>Data/Hora</th>
                     <th>Número do Processo</th>
+                    <th>Declaração</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,6 +26,11 @@
                     <td>{{ presenca.usuario.cpf }}</td>
                     <td>{{ presenca.data_presenca|date:"d/m/Y H:i" }}</td>
                     <td>{{ presenca.usuario.num_processo }}</td>
+                    <td>
+                        <a href="{% url 'gerar_declaracao' presenca.id %}" class="btn btn-primary btn-sm">
+                            Gerar Declaração
+                        </a>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>

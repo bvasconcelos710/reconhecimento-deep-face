@@ -2,7 +2,7 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
+  background-color: #e2dddd;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -27,9 +27,7 @@ html {
   padding: 10px;
 }
 
-.custom-bg {
-  background-color: #165fadd2 !important;
-}
+
 
 .nav-brand {
   font-weight: bold;
@@ -68,7 +66,6 @@ html {
   background-color: #165fadd2;
   border-color: #165fadd2;
   color: white;
-  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .btn-custom:hover {
@@ -76,6 +73,7 @@ html {
   /* um tom mais escuro para hover */
   border-color: #0f4c8a;
   transform: translateY(-2px);
+  color: white;
 }
 
 
@@ -91,7 +89,7 @@ html {
 .container {
   width: 100%;
   max-width: 800px;
-  background-color: eee;
+  background-color: white;
   margin: 40px auto;
   padding: 30px;
   border-radius: 12px;
@@ -132,7 +130,7 @@ button:hover {
 }
 
 h1 {
-  color: #2074ced2;
+  
   margin-bottom: 20px;
 }
 
