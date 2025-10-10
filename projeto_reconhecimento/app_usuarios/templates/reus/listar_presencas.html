@@ -22,10 +22,10 @@
             <tbody>
                 {% for presenca in presencas %}
                 <tr>
-                    <td>{{ presenca.usuario.nome }}</td>
-                    <td>{{ presenca.usuario.cpf }}</td>
+                    <td>{{ presenca.reu.nome }}</td>
+                    <td>{{ presenca.reu.cpf }}</td>
                     <td>{{ presenca.data_presenca|date:"d/m/Y H:i" }}</td>
-                    <td>{{ presenca.usuario.num_processo }}</td>
+                    <td>{{ presenca.reu.num_processo }}</td>
                     <td>
                         <a href="{% url 'gerar_declaracao' presenca.id %}" class="btn btn-primary btn-sm">
                             Gerar Declaração

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Réu cadastrado{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Presença Registrada com Sucesso!</h2>
+
+    <p><strong>Nome:</strong> {{ reu.nome }}</p>
+    <p><strong>CPF:</strong> {{ reu.cpf }}</p>
+    <p><strong>Telefone:</strong> {{ reu.telefone }}</p>
+    <p><strong>Número do Processo:</strong> {{ reu.num_processo }}</p>
+
+    {% if reu.foto %}
+    <p><strong>Foto cadastrada:</strong></p>
+    <img src="{{ reu.foto.url }}" alt="Foto do usuário" width="200">
+    {% endif %}
+
+    <br><br>
+    <a class="btn btn-custom" href="/">Voltar</a>
+</div>
+{% endblock %}

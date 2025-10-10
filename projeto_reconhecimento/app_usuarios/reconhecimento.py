@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from deepface import DeepFace
 
-def reconhecer_usuario(imagem_upload, usuarios):
+def reconhecer_reu(imagem_upload, reus):
     # Lê o conteúdo da imagem em memória
     imagem_bytes = imagem_upload.read()
     np_array = np.frombuffer(imagem_bytes, np.uint8)
@@ -10,16 +10,16 @@ def reconhecer_usuario(imagem_upload, usuarios):
     
     print("Formato da imagem convertida:", imagem_np.shape)
 
-    for usuario in usuarios:
+    for reu in reus:
         try:
             resultado = DeepFace.verify(
-                img1_path=usuario.foto.path, 
+                img1_path=reu.foto.path, 
                 img2_path=imagem_np,          
               
             )
-            print(f"Resultado com {usuario.nome}: {resultado}")
+            print(f"Resultado com {reu.nome}: {resultado}")
             if resultado['verified']:
-                return usuario
+                return reu
         except Exception as e:
             print(f"Erro na comparação: {e}")
             continue

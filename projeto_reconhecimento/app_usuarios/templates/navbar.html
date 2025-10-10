@@ -17,7 +17,7 @@
             {% if user.is_authenticated %}
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'cadastrar_usuario' %}">Cadastrar</a>
+                    <a class="nav-link" href="{% url 'cadastrar_reu' %}">Cadastrar</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'validar_presenca' %}">Verificar</a>
@@ -26,7 +26,7 @@
                     <a class="nav-link" href="{% url 'listar_presencas' %}">Registros</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'listar_usuarios' %}">Apenados</a>
+                    <a class="nav-link" href="{% url 'listar_reus' %}">Réus</a>
                 </li>
             </ul>
             {% endif %}

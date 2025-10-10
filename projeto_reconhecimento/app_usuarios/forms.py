@@ -1,17 +1,17 @@
 from django import forms
-from .models import Usuario
+from .models import Reu
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-class UsuarioForm(forms.ModelForm):
+class ReuForm(forms.ModelForm):
     class Meta:
-        model = Usuario
-        fields = ['nome', 'cpf', 'telefone', 'num_processo', 'foto']  # Campos que o formulário vai incluir
+        model = Reu
+        fields = ['nome', 'cpf', 'telefone', 'num_processo', 'foto', 'endereco', 'data_expiracao']  # Campos que o formulário vai incluir
         
     def clean_cpf(self):
         cpf = self.cleaned_data.get('cpf')
-        if Usuario.objects.filter(cpf=cpf).exists():
+        if Reu.objects.filter(cpf=cpf).exists():
             raise forms.ValidationError("Este CPF já está cadastrado.")
         return cpf
         
@@ -27,7 +27,7 @@ class UsuarioRegistroForm(UserCreationForm):
         }
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            # Campos de senha vêm do UserCreationForm, então adicionamos aqui:
+            
             self.fields['password1'].widget.attrs.update({'class': 'form-control'})
             self.fields['password2'].widget.attrs.update({'class': 'form-control'})
         

@@ -1,16 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Usuario, Presenca
-from .reconhecimento import reconhecer_usuario
-from .forms import UsuarioForm
+from .models import Reu, Presenca
+from .reconhecimento import reconhecer_reu
+from .forms import  ReuForm
+from .forms import UsuarioRegistroForm
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from .forms import UsuarioRegistroForm
 import datetime
 from django.http import HttpResponse
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
-def registrar_usuario(request):
+def registrar_reu(request):
     if request.method == 'POST':
         form = UsuarioRegistroForm(request.POST)
         if form.is_valid():
@@ -29,54 +29,54 @@ def inicio(request):
 def validar_presenca(request):
     if request.method == 'POST' and request.FILES.get('foto'):
         imagem = request.FILES['foto']
-        usuarios = Usuario.objects.all()
+        reus = Reu.objects.all()
 
-        usuario_encontrado = reconhecer_usuario(imagem, usuarios)
-        if usuario_encontrado:
+        reu_encontrado = reconhecer_reu(imagem, reus)
+        if reu_encontrado:
             # Mostra tela de validação ANTES de registrar a presença
-            return render(request, 'usuarios/validar_usuario.html', {'usuario': usuario_encontrado})
+            return render(request, 'reus/validar_reu.html', {'reu': reu_encontrado})
         
-        return render(request, 'usuarios/nao_reconhecido.html', {'mensagem': 'Usuário não reconhecido.'})
+        return render(request, 'reus/nao_reconhecido.html', {'mensagem': 'Usuário não reconhecido.'})
     
-    return render(request, 'usuarios/verificar.html')
+    return render(request, 'reus/verificar.html')
 
 @login_required(login_url='login')
-def confirmar_presenca(request, usuario_id):
-    usuario = get_object_or_404(Usuario, id=usuario_id)
-    Presenca.objects.create(usuario=usuario)
-    return render(request, 'usuarios/usuario_reconhecido.html', {'usuario': usuario})
+def confirmar_presenca(request, reu_id):
+    reu = get_object_or_404(Reu, id=reu_id)
+    Presenca.objects.create(reu=reu)
+    return render(request, 'reus/reu_reconhecido.html', {'reu': reu})
 
 @login_required(login_url='login')
-def cadastrar_usuario(request):
+def cadastrar_reu(request):
     if request.method == 'POST':
-        form = UsuarioForm(request.POST, request.FILES)
+        form = ReuForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()  # Salva o novo usuário no banco de dados
-            return redirect('usuario_cadastrado')  # Redireciona para a página de confirmação
+            return redirect('reu_cadastrado')  # Redireciona para a página de confirmação
     else:
-        form = UsuarioForm()
+        form = ReuForm()
 
-    return render(request, 'usuarios/cadastrar_usuario.html', {'form': form})
+    return render(request, 'reus/cadastrar_reu.html', {'form': form})
 
-
-@login_required(login_url='login')
-def usuario_cadastrado(request):
-    return render(request, 'usuarios/usuario_cadastrado.html')
 
 @login_required(login_url='login')
-def listar_usuarios(request):
-    usuarios_list = Usuario.objects.all()
-    paginator = Paginator(usuarios_list, 10)  # 10 usuários por página
+def reu_cadastrado(request):
+    return render(request, 'reus/reu_cadastrado.html')
+
+@login_required(login_url='login')
+def listar_reus(request):
+    reus_list = Reu.objects.all()
+    paginator = Paginator(reus_list, 10)  # 10 usuários por página
     page_number = request.GET.get('page')
-    usuarios = paginator.get_page(page_number)
-    return render(request, 'usuarios/listar_usuarios.html', {'usuarios': usuarios})
+    reus = paginator.get_page(page_number)
+    return render(request, 'reus/listar_reus.html', {'reus': reus})
 
 @login_required(login_url='login')
-def editar_usuario(request, usuario_id):
-    usuario = get_object_or_404(Usuario, id=usuario_id)
+def editar_reu(request, reu_id):
+    reu = get_object_or_404(Reu, id=reu_id)
 
     if request.method == "POST":
-        form = UsuarioForm(request.POST, request.FILES, instance=usuario)
+        form = ReuForm(request.POST, request.FILES, instance=reu)
 
         # Verifica se veio uma nova foto da webcam
         nova_foto_base64 = request.POST.get("nova_foto")
@@ -85,48 +85,48 @@ def editar_usuario(request, usuario_id):
             from django.core.files.base import ContentFile
             format, imgstr = nova_foto_base64.split(';base64,')
             ext = format.split('/')[-1]
-            usuario.foto.save(
-                f"usuario_{usuario.id}.{ext}",
+            reu.foto.save(
+                f"reu_{reu.id}.{ext}",
                 ContentFile(base64.b64decode(imgstr)),
                 save=False
             )
 
         if form.is_valid():
             form.save()
-            return redirect('listar_usuarios')
+            return redirect('listar_reus')
 
     else:
-        form = UsuarioForm(instance=usuario)
+        form = ReuForm(instance=reu)
 
-    return render(request, 'usuarios/editar_usuario.html', {
+    return render(request, 'reus/editar_reu.html', {
         'form': form,
-        'usuario': usuario  # 🔑 Aqui está o que faltava!
+        'reu': reu  
     })
 
 @login_required(login_url='login')
-def deletar_usuario(request, usuario_id):
-    usuario = get_object_or_404(Usuario, id=usuario_id)
+def deletar_reu(request, reu_id):
+    reu = get_object_or_404(Reu, id=reu_id)
     if request.method == "POST":
-        usuario.delete()
-        return redirect('listar_usuarios')
-    return render(request, 'usuarios/deletar_usuario.html', {'usuario': usuario})
+        reu.delete()
+        return redirect('listar_reus')
+    return render(request, 'reus/deletar_reu.html', {'reu': reu})
 
 @login_required(login_url='login')
 def listar_presencas(request):
-    presencas_list = Presenca.objects.select_related('usuario').order_by('-data_presenca')
+    presencas_list = Presenca.objects.select_related('reu').order_by('-data_presenca')
     paginator = Paginator(presencas_list, 10)  # 10 por página
 
     page_number = request.GET.get('page')
     presencas = paginator.get_page(page_number)
 
-    return render(request, 'usuarios/listar_presencas.html', {'presencas': presencas})
+    return render(request, 'reus/listar_presencas.html', {'presencas': presencas})
 
 @login_required(login_url='login')
-def detalhes_usuario(request, usuario_id):
-    usuario = get_object_or_404(Usuario, id=usuario_id)
+def detalhes_reu(request, reu_id):
+    reu = get_object_or_404(Reu, id=reu_id)
 
     # Filtra somente as presenças do usuário
-    presencas_list = Presenca.objects.filter(usuario=usuario).order_by('-data_presenca')
+    presencas_list = Presenca.objects.filter(reu=reu).order_by('-data_presenca')
 
     # Aplica paginação (10 registros por página)
     paginator = Paginator(presencas_list, 10)
@@ -135,9 +135,9 @@ def detalhes_usuario(request, usuario_id):
 
     return render(
         request,
-        'usuarios/detalhes_usuario.html',
+        'reus/detalhes_reu.html',
         {
-            'usuario': usuario,
+            'reu': reu,
             'presencas': presencas
         }
     )
@@ -147,7 +147,7 @@ def gerar_declaracao(request, presenca_id):
 
     # Configuração do PDF
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="declaracao_{presenca.usuario.nome}.pdf"'
+    response['Content-Disposition'] = f'attachment; filename="declaracao_{presenca.reu.nome}.pdf"'
 
     p = canvas.Canvas(response, pagesize=A4)
     largura, altura = A4
@@ -159,8 +159,8 @@ def gerar_declaracao(request, presenca_id):
     # Corpo do texto
     p.setFont("Helvetica", 12)
     texto = f"""
-    Declaramos para os devidos fins que {presenca.usuario.nome},
-    portador do CPF {presenca.usuario.cpf}, compareceu a este fórum de justiça
+    Declaramos para os devidos fins que {presenca.reu.nome},
+    portador do CPF {presenca.reu.cpf}, compareceu a este fórum de justiça
     no dia {presenca.data_presenca.strftime('%d/%m/%Y')} às {presenca.data_presenca.strftime('%H:%M')}.
     """
 
@@ -172,7 +172,7 @@ def gerar_declaracao(request, presenca_id):
 
     # Rodapé
     p.setFont("Helvetica-Oblique", 10)
-    p.drawCentredString(largura / 2, 80, f"Emitido em {datetime.date.today().strftime('%d/%m/%Y')}")
+    p.drawCentredString(largura / 2, 80, f"Emitido em {datetime.date.today().strftime('%d/%m/%Y')} através do sistema JusFacial")
 
     p.showPage()
     p.save()

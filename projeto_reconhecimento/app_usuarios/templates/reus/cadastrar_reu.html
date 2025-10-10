@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Cadastro de Usuário{% endblock %}
+{% block title %}Cadastro de Réu{% endblock %}
 
 {% block content %}
 <div class="mt-5">
@@ -41,7 +41,7 @@
               <!-- Nome -->
               <div class="mb-3">
                 <label for="nome" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="nome" name="nome" placeholder="nome completo" required>
+                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome completo" required>
                 {% for e in form.nome.errors %}
                 <div class="invalid-feedback d-block">{{ e }}</div>
                 {% endfor %}
@@ -50,7 +50,7 @@
               <!-- CPF -->
               <div class="mb-3">
                 <label for="cpf" class="form-label">CPF</label>
-                <input type="text" class="form-control" id="cpf" name="cpf" placeholder="000.000.000-00 " required>
+                <input type="text" class="form-control" id="cpf" name="cpf" placeholder="Apenas números" required>
                 {% for e in form.cpf.errors %}
                 <div class="invalid-feedback d-block">{{ e }}</div>
                 {% endfor %}
@@ -59,7 +59,7 @@
               <!-- Telefone -->
               <div class="mb-3">
                 <label for="telefone" class="form-label">Telefone</label>
-                <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="(99) 99999-9999">
+                <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="99 999999999">
                 {% for e in form.telefone.errors %}
                 <div class="invalid-feedback d-block">{{ e }}</div>
                 {% endfor %}
@@ -74,17 +74,34 @@
                 <div class="invalid-feedback d-block">{{ e }}</div>
                 {% endfor %}
               </div>
+
+              <!-- Endereço -->
+              <div class="mb-3">
+                <label for="endereco" class="form-label">Endereço</label>
+                <input type="text" class="form-control" id="endereco" name="endereco"
+                  placeholder="Rua Exemplo, 123, Bairro, Cidade" required>
+                {% for e in form.endereco.errors %}
+                <div class="invalid-feedback d-block">{{ e }}</div>
+                {% endfor %}
+              </div>
+
+              <!-- Data de Expiração -->
+              <div class="mb-3">
+                <label for="data_expiracao" class="form-label">Data de Expiração</label>
+                <input type="date" class="form-control" id="data_expiracao" name="data_expiracao" required>
+                {% for e in form.data_expiracao.errors %}
+                <div class="invalid-feedback d-block">{{ e }}</div>
+                {% endfor %}
+              </div>
+
+              <!-- Campo oculto que vai com a foto para o backend -->
+              <input type="file" id="input-foto" name="foto" accept="image/*" class="d-none" />
+
+              <!-- Botão -->
+              <div>
+                <button type="submit" class="btn btn-custom">Cadastrar</button>
+              </div>
             </div>
-
-          </div>
-
-          <!-- Campo oculto que vai com a foto para o backend -->
-          <input type="file" id="input-foto" name="foto" accept="image/*" class="d-none" />
-
-          <!-- Botão -->
-          <div>
-            <button type="submit" class="btn btn-custom">Cadastrar</button>
-          </div>
         </form>
       </div>
     </div>
